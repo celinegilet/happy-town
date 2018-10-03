@@ -1,0 +1,3 @@
+INSERT INTO habitant(id, nom, prenom, email, date_naissance, date_arrivee_commune, adresse_postale) VALUES ('5e18367a-1eb3-4b91-b87a-44cd210ef7ba', 'Carin', 'Marie', 'marie.carin@example.fr', '1980-10-08', '2016-12-01', '12 rue des Lilas');
+INSERT INTO habitant(id, nom, prenom, email, date_naissance, date_arrivee_commune, adresse_postale) VALUES ('939c0a28-c407-4ce3-b661-d96a412a3d29', 'Robin', 'Patrick', 'patrick.robin@example.fr', '2000-06-12', CURRENT_DATE(), '28 rue des Pivoines');
+INSERT INTO habitant(id, nom, prenom, email, date_naissance, date_arrivee_commune, adresse_postale) VALUES ('aebb21fa-b981-4baa-9668-52be5ea3ce90', 'Moulin', 'Camille', 'camille.moulin@example.fr', '2018-02-05', DATEADD('YEAR', -1, CURRENT_DATE), '1 rue des Acacias');

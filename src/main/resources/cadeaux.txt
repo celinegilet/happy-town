@@ -1,0 +1,51 @@
+Référence,Description,Montant,Tranche d'âge
+70d73d02,Peluche oggy et les cafards,11.99,0-3
+c01c31a3,Cheval floppy,14.99,0-3
+fc02d2df,Freddie la luciole,15.99,0-3
+66418d5b,La pieuvre d'activités,19.99,0-3
+a3d832e5,Peluche souris étoile,24.99,0-3
+b3f83de3,Pistolet à bulles à led,8.79,3-6
+6a52d970,Mémo les petits des animaux,6.99,3-6
+2287ae90,Pâte à modeler party tube,12.25,3-6
+a3ba8f33,Domino mickey top départ,5.99,3-6
+b37eb259,Maracas,15.89,3-6
+2ee03dac,Boîte en bois mikado,5.99,6-10
+dbe982da,Puissance 4 voyage,7.99,6-10
+eae0871f,Défis nature - les châteaux,12.25,6-10
+b96c5bb7,Puzzle défilé disney 200 pièces,9.99,6-10
+7db6a02f,Découvre le corps humain,15.50,6-10
+6890e222,Puzzle 1000 pièces magnifique ville de new-york,14.99,10-15
+95352fa2,Kit kart hoverboard,39.99,10-15
+15affe80,Loup Garou,11.99,10-15
+95013804,Ma chimie super facile,9.99,10-15
+30b183cf,Colt express,29.99,10-15
+cae67bbb,Tasse magique Licorne,21.90,15-20
+225973d8,Carte du monde en liège,23.90,15-20
+6f7c3c97,Taille crayon appareil photo,14.90,15-20
+001f1a3f,Lampe de bureau Star Wars,28.90,15-20
+268594d7,Lampe de chevet Licorne,18.90,15-20
+5bd74b84,Chauffe tasse USB,15.90,20-30
+14cfe629,Bonnet stylé,14.90,20-30
+29e1b862,Tasse look métalique,8.60,20-30
+07eb02d3,Carte du monde 3D,30.25,20-30
+3d1248c5,Sac bandoulière,18.65,20-30
+aa23c026,Plateau pour canapé,24.90,30-40
+6a64d9e7,Le mug qui touille tout seul,19.90,30-40
+861d1d35,Gourde de voyage,9.99,30-40
+37c88b3c,Porte stylo et bloc notes,12.60,30-40
+d9b68019,Service à café,29.90,30-40
+dd1954e8,Carte cadeau culture à Paris,25.00,40-50
+a40d837a,Guirlande lumineuse multicolor,28.90,40-50
+40a88a96,Bocal distributeur de boisson,11.90,40-50
+6e40b52d,Tasses à expresso,12.60,40-50
+7c5e8641,Pot de fleur de bureau,19.90,40-50
+f14f767d,Tablier de cuisine,25.90,50-60
+9393cf65,Planche à découper Guitare,29.90,50-60
+6082f1f6,Poster 100 films à voir avant de mourir,28.90,50-60
+e72cfae4,Coussin chauffant,22.90,50-60
+7b22a16f,Tir bouchon éléphant,16.90,50-60
+b9dcca0d,Chocolats Toblerone,12.90,60-150
+90a2efeb,Tasse photo,13.90,60-150
+67f53023,Coussin déco,19.90,60-150
+0200ddd6,Arbre à photos,27.90,60-150
+d9860e8d,Sets de bougies,15.60,60-150
