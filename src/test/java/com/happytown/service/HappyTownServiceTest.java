@@ -2,7 +2,7 @@ package com.happytown.service;
 
 import com.dumbster.smtp.SimpleSmtpServer;
 import com.dumbster.smtp.SmtpMessage;
-import com.happytown.domain.Habitant;
+import com.happytown.core.entities.Habitant;
 import com.happytown.repository.HabitantRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +54,7 @@ class HappyTownServiceTest {
     private static final Pattern REGEX_REF_CADEAUX_TRANCHE_AGE_60_150 = Pattern.compile("b9dcca0d|90a2efeb|67f53023|0200ddd6|d9860e8d");
 
     @BeforeEach
-    void setUp() throws InterruptedException {
+    void setUp() {
         mailServer = SimpleSmtpServer.start(SMTP_PORT);
     }
 
@@ -67,15 +67,14 @@ class HappyTownServiceTest {
     @Test
     void attribuerCadeaux_habitantTrancheAge0_3() throws IOException, MessagingException {
         // Given
-        Habitant habitant = Habitant.builder()
-                .id(UUID.randomUUID().toString())
-                .nom("Paron")
-                .prenom("Elise")
-                .adressePostale("48 faubourg de la Plage")
-                .email("elise.paron@example.fr")
-                .dateNaissance(LocalDate.of(2018, 6, 22))
-                .dateArriveeCommune(LocalDate.of(2017, 5, 1))
-                .build();
+        String id = UUID.randomUUID().toString();
+        String nom = "Paron";
+        String prenom = "Elise";
+        String email = "elise.paron@example.fr";
+        LocalDate dateNaissance = LocalDate.of(2018, 6, 22);
+        LocalDate dateArriveeCommune = LocalDate.of(2017, 5, 1);
+        String adressePostale = "48 faubourg de la Plage";
+        Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
                 .when(habitantRepository)
                 .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
@@ -91,15 +90,14 @@ class HappyTownServiceTest {
     @Test
     void attribuerCadeaux_habitantTrancheAge3_6() throws IOException, MessagingException {
         // Given
-        Habitant habitant = Habitant.builder()
-                .id(UUID.randomUUID().toString())
-                .nom("Giron")
-                .prenom("Manon")
-                .adressePostale("2 rue des Apotres")
-                .email("manon.giron@example.fr")
-                .dateNaissance(LocalDate.of(2012, 10, 2))
-                .dateArriveeCommune(LocalDate.of(2017, 5, 1))
-                .build();
+        String id = UUID.randomUUID().toString();
+        String nom = "Giron";
+        String prenom = "Manon";
+        String email = "manon.giron@example.fr";
+        LocalDate dateNaissance = LocalDate.of(2012, 10, 2);
+        LocalDate dateArriveeCommune = LocalDate.of(2017, 5, 1);
+        String adressePostale = "2 rue des Apotres";
+        Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
                 .when(habitantRepository)
                 .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
@@ -115,15 +113,14 @@ class HappyTownServiceTest {
     @Test
     void attribuerCadeaux_habitantTrancheAge6_10() throws IOException, MessagingException {
         // Given
-        Habitant habitant = Habitant.builder()
-                .id(UUID.randomUUID().toString())
-                .nom("Perraud")
-                .prenom("Lucas")
-                .adressePostale("17 boulevard des Capucines")
-                .email("lucas.perraud@example.fr")
-                .dateNaissance(LocalDate.of(2011, 4, 4))
-                .dateArriveeCommune(LocalDate.of(2017, 9, 10))
-                .build();
+        String id = UUID.randomUUID().toString();
+        String nom = "Perraud";
+        String prenom = "Lucas";
+        String email = "lucas.perraud@example.fr";
+        LocalDate dateNaissance = LocalDate.of(2011, 4, 4);
+        LocalDate dateArriveeCommune = LocalDate.of(2017, 9, 10);
+        String adressePostale = "17 boulevard des Capucines";
+        Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
                 .when(habitantRepository)
                 .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
@@ -139,15 +136,14 @@ class HappyTownServiceTest {
     @Test
     void attribuerCadeaux_habitantTrancheAge10_15() throws IOException, MessagingException {
         // Given
-        Habitant habitant = Habitant.builder()
-                .id(UUID.randomUUID().toString())
-                .nom("Leduc")
-                .prenom("Etienne")
-                .adressePostale("28 square du Bois Fleuri")
-                .email("etienne.leduc@example.fr")
-                .dateNaissance(LocalDate.of(2006, 5, 14))
-                .dateArriveeCommune(LocalDate.of(2017, 9, 10))
-                .build();
+        String id = UUID.randomUUID().toString();
+        String nom = "Leduc";
+        String prenom = "Etienne";
+        String email = "etienne.leduc@example.fr";
+        LocalDate dateNaissance = LocalDate.of(2006, 5, 14);
+        LocalDate dateArriveeCommune = LocalDate.of(2017, 9, 10);
+        String adressePostale = "28 square du Bois Fleuri";
+        Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
                 .when(habitantRepository)
                 .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
@@ -163,15 +159,14 @@ class HappyTownServiceTest {
     @Test
     void attribuerCadeaux_habitantTrancheAge15_20() throws IOException, MessagingException {
         // Given
-        Habitant habitant = Habitant.builder()
-                .id(UUID.randomUUID().toString())
-                .nom("Guilbaud")
-                .prenom("Elodie")
-                .adressePostale("1 impasse du Cheval Blanc")
-                .email("elodie.guilbaud@example.fr")
-                .dateNaissance(LocalDate.of(1998, 10, 2))
-                .dateArriveeCommune(LocalDate.of(2017, 10, 1))
-                .build();
+        String id = UUID.randomUUID().toString();
+        String nom = "Guilbaud";
+        String prenom = "Elodie";
+        String email = "elodie.guilbaud@example.fr";
+        LocalDate dateNaissance = LocalDate.of(1998, 10, 2);
+        LocalDate dateArriveeCommune = LocalDate.of(2017, 10, 1);
+        String adressePostale = "1 impasse du Cheval Blanc";
+        Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
                 .when(habitantRepository)
                 .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
@@ -187,15 +182,14 @@ class HappyTownServiceTest {
     @Test
     void attribuerCadeaux_habitantTrancheAge20_30() throws IOException, MessagingException {
         // Given
-        Habitant habitant = Habitant.builder()
-                .id(UUID.randomUUID().toString())
-                .nom("Newman")
-                .prenom("Paul")
-                .adressePostale("14 chemin Edmond Rostand")
-                .email("paul.newman@example.fr")
-                .dateNaissance(LocalDate.of(1998, 10, 1))
-                .dateArriveeCommune(LocalDate.of(2017, 10, 1))
-                .build();
+        String id = UUID.randomUUID().toString();
+        String nom = "Newman";
+        String prenom = "Paul";
+        String email = "paul.newman@example.fr";
+        LocalDate dateNaissance = LocalDate.of(1998, 10, 1);
+        LocalDate dateArriveeCommune = LocalDate.of(2017, 10, 1);
+        String adressePostale = "14 chemin Edmond Rostand";
+        Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
                 .when(habitantRepository)
                 .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
@@ -211,15 +205,14 @@ class HappyTownServiceTest {
     @Test
     void attribuerCadeaux_habitantTrancheAge30_40() throws IOException, MessagingException {
         // Given
-        Habitant habitant = Habitant.builder()
-                .id(UUID.randomUUID().toString())
-                .nom("Carin")
-                .prenom("Marie")
-                .adressePostale("12 rue des Lilas")
-                .email("marie.carin@example.fr")
-                .dateNaissance(LocalDate.of(1980, 10, 8))
-                .dateArriveeCommune(LocalDate.of(2016, 12, 1))
-                .build();
+        String id = UUID.randomUUID().toString();
+        String nom = "Carin";
+        String prenom = "Marie";
+        String email = "marie.carin@example.fr";
+        LocalDate dateNaissance = LocalDate.of(1980, 10, 8);
+        LocalDate dateArriveeCommune = LocalDate.of(2016, 12, 1);
+        String adressePostale = "12 rue des Lilas";
+        Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
                 .when(habitantRepository)
                 .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
@@ -235,15 +228,14 @@ class HappyTownServiceTest {
     @Test
     void attribuerCadeaux_habitantTrancheAge40_50() throws IOException, MessagingException {
         // Given
-        Habitant habitant = Habitant.builder()
-                .id(UUID.randomUUID().toString())
-                .nom("Dumond")
-                .prenom("Michel")
-                .adressePostale("18 square de Crusoe")
-                .email("michel.dumond@example.fr")
-                .dateNaissance(LocalDate.of(1970, 10, 25))
-                .dateArriveeCommune(LocalDate.of(2016, 12, 1))
-                .build();
+        String id = UUID.randomUUID().toString();
+        String nom = "Dumond";
+        String prenom = "Michel";
+        String email = "michel.dumond@example.fr";
+        LocalDate dateNaissance = LocalDate.of(1970, 10, 25);
+        LocalDate dateArriveeCommune = LocalDate.of(2016, 12, 1);
+        String adressePostale = "18 square de Crusoe";
+        Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
                 .when(habitantRepository)
                 .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
@@ -259,15 +251,14 @@ class HappyTownServiceTest {
     @Test
     void attribuerCadeaux_habitantTrancheAge50_60() throws IOException, MessagingException {
         // Given
-        Habitant habitant = Habitant.builder()
-                .id(UUID.randomUUID().toString())
-                .nom("Avro")
-                .prenom("Julien")
-                .adressePostale("15 rue Apigi")
-                .email("julien.avro@example.fr")
-                .dateNaissance(LocalDate.of(1965, 6, 25))
-                .dateArriveeCommune(LocalDate.of(2016, 12, 1))
-                .build();
+        String id = UUID.randomUUID().toString();
+        String nom = "Avro";
+        String prenom = "Julien";
+        String email = "julien.avro@example.fr";
+        LocalDate dateNaissance = LocalDate.of(1965, 6, 25);
+        LocalDate dateArriveeCommune = LocalDate.of(2016, 12, 1);
+        String adressePostale = "15 rue Apigi";
+        Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
                 .when(habitantRepository)
                 .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
@@ -283,15 +274,14 @@ class HappyTownServiceTest {
     @Test
     void attribuerCadeaux_habitantTrancheAge60_150() throws IOException, MessagingException {
         // Given
-        Habitant habitant = Habitant.builder()
-                .id(UUID.randomUUID().toString())
-                .nom("Pascalin")
-                .prenom("Yvette")
-                .adressePostale("34 rue des Koali")
-                .email("yvette.pascalin@example.fr")
-                .dateNaissance(LocalDate.of(1958, 2, 14))
-                .dateArriveeCommune(LocalDate.of(2016, 12, 1))
-                .build();
+        String id = UUID.randomUUID().toString();
+        String nom = "Pascalin";
+        String prenom = "Yvette";
+        String email = "yvette.pascalin@example.fr";
+        LocalDate dateNaissance = LocalDate.of(1958, 2, 14);
+        LocalDate dateArriveeCommune = LocalDate.of(2016, 12, 1);
+        String adressePostale = "";
+        Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
                 .when(habitantRepository)
                 .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);

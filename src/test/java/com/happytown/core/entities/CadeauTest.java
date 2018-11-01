@@ -1,4 +1,4 @@
-package com.happytown.domain;
+package com.happytown.core.entities;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,13 +11,11 @@ class CadeauTest {
     @Test
     void getDetail() {
         // Given
-        TrancheAge trancheAge6_10 = TrancheAge.builder().ageMin(6).ageMax(10).build();
-        Cadeau cadeau = Cadeau.builder()
-                .reference("dbe982da")
-                .description("Puissance 4 voyage")
-                .montant(BigDecimal.valueOf(7.99))
-                .trancheAge(trancheAge6_10)
-                .build();
+        TrancheAge trancheAge6_10 = new TrancheAge(6, 10);
+        BigDecimal montant = BigDecimal.valueOf(7.99);
+        String description = "Puissance 4 voyage";
+        String reference = "dbe982da";
+        Cadeau cadeau = new Cadeau(reference, description, montant, trancheAge6_10);
 
         // When
         String detail = cadeau.getDetail();

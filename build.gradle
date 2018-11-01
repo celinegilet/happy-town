@@ -10,7 +10,6 @@ ext {
     h2Version = '1.4.199'
     junitVersion = '5.4.1'
     logbackVersion = '1.2.3'
-    lombokVersion = '1.18.6'
     mailVersion = '1.4.7'
     mockitoVersion = '2.27.0'
     springBootVersion = '2.1.4.RELEASE'
@@ -53,10 +52,6 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
     testImplementation "dumbster:dumbster:${dumbsterVersion}"
-
-    // Annotations
-    implementation "org.projectlombok:lombok:${lombokVersion}"
-    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 }
 
 test {

@@ -1,6 +1,6 @@
 package com.happytown.controller;
 
-import com.happytown.domain.Habitant;
+import com.happytown.core.entities.Habitant;
 import com.happytown.service.HabitantService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

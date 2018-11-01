@@ -1,6 +1,6 @@
 package com.happytown.repository;
 
-import com.happytown.domain.Habitant;
+import com.happytown.core.entities.Habitant;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

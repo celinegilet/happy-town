@@ -1,28 +1,20 @@
-package com.happytown.domain;
+package com.happytown.core.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class Cadeau {
 
-    @NotBlank
     private String reference;
-    @NotBlank
     private String description;
-    @NotNull
     private BigDecimal montant;
-    @NotNull
     private TrancheAge trancheAge;
+
+    public Cadeau(String reference, String description, BigDecimal montant, TrancheAge trancheAge) {
+        this.reference = reference;
+        this.description = description;
+        this.montant = montant;
+        this.trancheAge = trancheAge;
+    }
 
     public String getDetail() {
         return this.description + " " +
