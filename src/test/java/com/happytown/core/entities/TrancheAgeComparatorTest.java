@@ -1,6 +1,5 @@
-package com.happytown.service;
+package com.happytown.core.entities;
 
-import com.happytown.core.entities.TrancheAge;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;

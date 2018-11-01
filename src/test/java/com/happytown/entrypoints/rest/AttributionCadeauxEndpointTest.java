@@ -1,6 +1,6 @@
-package com.happytown.controller;
+package com.happytown.entrypoints.rest;
 
-import com.happytown.service.HappyTownService;
+import com.happytown.core.use_cases.AttribuerCadeaux;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +13,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(HappyTownController.class)
-class HappyTownControllerIntegrationTest {
+@WebMvcTest(AttributionCadeauxEndpoint.class)
+class AttributionCadeauxEndpointTest {
 
     @Autowired
     MockMvc mockMvc;
 
     @MockBean
-    HappyTownService happyTownService;
+    AttribuerCadeaux attribuerCadeaux;
 
     @Test
     void attribuerCadeaux() throws Exception {

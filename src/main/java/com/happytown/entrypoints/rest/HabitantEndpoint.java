@@ -14,7 +14,7 @@ import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/api/habitants")
-@Api(description = "API de gestion des habitants de Happy Town")
+@Api(value = "API de gestion des habitants de Happy Town")
 public class HabitantEndpoint {
 
     private final GetAllHabitants getAllHabitants;
