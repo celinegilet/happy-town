@@ -3,7 +3,7 @@ package com.happytown.service;
 import com.dumbster.smtp.SimpleSmtpServer;
 import com.dumbster.smtp.SmtpMessage;
 import com.happytown.core.entities.Habitant;
-import com.happytown.repository.HabitantRepository;
+import com.happytown.core.use_cases.HabitantProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class HappyTownServiceTest {
     HappyTownService happyTownService;
 
     @Mock
-    HabitantRepository habitantRepository;
+    HabitantProvider habitantProvider;
 
     private SimpleSmtpServer mailServer;
 
@@ -76,8 +76,8 @@ class HappyTownServiceTest {
         String adressePostale = "48 faubourg de la Plage";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
-                .when(habitantRepository)
-                .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
+                .when(habitantProvider)
+                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
         happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
@@ -99,8 +99,8 @@ class HappyTownServiceTest {
         String adressePostale = "2 rue des Apotres";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
-                .when(habitantRepository)
-                .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
+                .when(habitantProvider)
+                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
         happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
@@ -122,8 +122,8 @@ class HappyTownServiceTest {
         String adressePostale = "17 boulevard des Capucines";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
-                .when(habitantRepository)
-                .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
+                .when(habitantProvider)
+                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
         happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
@@ -145,8 +145,8 @@ class HappyTownServiceTest {
         String adressePostale = "28 square du Bois Fleuri";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
-                .when(habitantRepository)
-                .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
+                .when(habitantProvider)
+                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
         happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
@@ -168,8 +168,8 @@ class HappyTownServiceTest {
         String adressePostale = "1 impasse du Cheval Blanc";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
-                .when(habitantRepository)
-                .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
+                .when(habitantProvider)
+                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
         happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
@@ -191,8 +191,8 @@ class HappyTownServiceTest {
         String adressePostale = "14 chemin Edmond Rostand";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
-                .when(habitantRepository)
-                .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
+                .when(habitantProvider)
+                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
         happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
@@ -214,8 +214,8 @@ class HappyTownServiceTest {
         String adressePostale = "12 rue des Lilas";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
-                .when(habitantRepository)
-                .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
+                .when(habitantProvider)
+                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
         happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
@@ -237,8 +237,8 @@ class HappyTownServiceTest {
         String adressePostale = "18 square de Crusoe";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
-                .when(habitantRepository)
-                .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
+                .when(habitantProvider)
+                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
         happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
@@ -260,8 +260,8 @@ class HappyTownServiceTest {
         String adressePostale = "15 rue Apigi";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
-                .when(habitantRepository)
-                .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
+                .when(habitantProvider)
+                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
         happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
@@ -283,8 +283,8 @@ class HappyTownServiceTest {
         String adressePostale = "";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
         doReturn(newArrayList(habitant))
-                .when(habitantRepository)
-                .findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(NOW_MINUS_ONE_YEAR);
+                .when(habitantProvider)
+                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
         happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
@@ -317,7 +317,7 @@ class HappyTownServiceTest {
 
     private void verifyHabitantSaved(Pattern regExpRefCadeau) {
         ArgumentCaptor<Habitant> habitantArgumentCaptor = ArgumentCaptor.forClass(Habitant.class);
-        verify(habitantRepository).save(habitantArgumentCaptor.capture());
+        verify(habitantProvider).save(habitantArgumentCaptor.capture());
         Habitant habitantSaved = habitantArgumentCaptor.getValue();
         assertThat(habitantSaved.getCadeauOffert()).containsPattern(regExpRefCadeau);
         assertThat(habitantSaved.getDateAttributionCadeau()).isEqualTo(NOW);

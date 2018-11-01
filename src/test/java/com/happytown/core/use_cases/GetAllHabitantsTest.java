@@ -1,7 +1,6 @@
-package com.happytown.service;
+package com.happytown.core.use_cases;
 
 import com.happytown.core.entities.Habitant;
-import com.happytown.core.use_cases.HabitantProvider;
 import com.happytown.fixtures.HabitantFixture;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -16,22 +15,22 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-class HabitantServiceTest {
+class GetAllHabitantsTest {
 
     @InjectMocks
-    HabitantService habitantService;
+    GetAllHabitants getAllHabitants;
 
     @Mock
     HabitantProvider habitantProvider;
 
     @Test
-    void getAll_shouldReturnAllHabitants() {
+    void execute_shouldReturnHabitantsFromProvider() {
         // Given
         List<Habitant> habitants = Lists.newArrayList(HabitantFixture.aHabitant());
         BDDMockito.doReturn(habitants).when(habitantProvider).getAll();
 
         // When
-        List<Habitant> results = habitantService.getAll();
+        List<Habitant> results = getAllHabitants.execute();
 
         // Then
         assertThat(results).containsExactlyElementsOf(habitants);
