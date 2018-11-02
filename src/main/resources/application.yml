@@ -8,7 +8,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         show_sql: true
@@ -26,3 +26,7 @@ mail:
     host: localhost
     port: 2525
     from: mairie@happytown.com
+
+file:
+  cadeauxByTrancheAge:
+    path: src/main/resources/cadeaux.txt

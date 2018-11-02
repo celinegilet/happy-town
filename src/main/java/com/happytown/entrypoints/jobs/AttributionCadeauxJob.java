@@ -7,9 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.io.IOException;
-import java.time.LocalDate;
-
 @Configuration
 @EnableScheduling
 public class AttributionCadeauxJob {
@@ -23,11 +20,9 @@ public class AttributionCadeauxJob {
     }
 
     @Scheduled(cron = "0 0/2 * * * *")
-    public void execute() throws IOException {
+    public void execute() {
         LOGGER.info("Start Task execute");
-        String fileName = "src/main/resources/cadeaux.txt";
-        LocalDate now = LocalDate.now();
-        attribuerCadeaux.execute(fileName, now);
+        attribuerCadeaux.execute();
         LOGGER.info("End Task execute");
     }
 }

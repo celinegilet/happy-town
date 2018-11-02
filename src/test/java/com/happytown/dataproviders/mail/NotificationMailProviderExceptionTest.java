@@ -10,9 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import javax.mail.MessagingException;
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -34,7 +31,7 @@ class NotificationMailProviderExceptionTest {
                     .relayDomains("example.fr"));
 
     @Test
-    void notifier_shouldThrowNotificationException() throws IOException, MessagingException {
+    void notifier_shouldThrowNotificationException() {
         // Given
         String to = "camille.moulin@example.fr";
         String subject = "Happy Birthday in HappyTown!";

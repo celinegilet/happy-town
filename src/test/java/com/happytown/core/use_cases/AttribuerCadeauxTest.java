@@ -1,6 +1,10 @@
 package com.happytown.core.use_cases;
 
+import com.happytown.core.entities.Cadeau;
 import com.happytown.core.entities.Habitant;
+import com.happytown.core.entities.TrancheAge;
+import com.happytown.dataproviders.file.CadeauxByTrancheAgeFileProvider;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -8,9 +12,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.mail.MessagingException;
-import java.io.IOException;
+import java.lang.reflect.Field;
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -30,9 +39,21 @@ class AttribuerCadeauxTest {
     @Mock
     NotificationProvider notificationProvider;
 
-    private static final String FILE_NAME = "src/main/resources/cadeaux.txt";
-    private static final LocalDate NOW = LocalDate.of(2018, 10, 1);
-    private static final LocalDate NOW_MINUS_ONE_YEAR = LocalDate.of(2017, 10, 1);
+    @Mock
+    CadeauxByTrancheAgeProvider cadeauxByTrancheAgeProvider;
+
+    private static Map<TrancheAge, List<Cadeau>> CADEAUX_BY_TRANCHE_AGE = new TreeMap<>();
+    static {
+        CadeauxByTrancheAgeFileProvider cadeauxByTrancheAgeFileProvider = new CadeauxByTrancheAgeFileProvider();
+        try {
+            Field pathFileCadeauxByTrancheAge = CadeauxByTrancheAgeFileProvider.class.getDeclaredField("pathFileCadeauxByTrancheAge");
+            pathFileCadeauxByTrancheAge.setAccessible(true);
+            pathFileCadeauxByTrancheAge.set(cadeauxByTrancheAgeFileProvider, "src/main/resources/cadeaux.txt");
+            CADEAUX_BY_TRANCHE_AGE = cadeauxByTrancheAgeFileProvider.get();
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 
     private static final Pattern REGEX_REF_CADEAUX_TRANCHE_AGE_0_3 = Pattern.compile("70d73d02|c01c31a3|fc02d2df|66418d5b|a3d832e5");
     private static final Pattern REGEX_REF_CADEAUX_TRANCHE_AGE_3_6 = Pattern.compile("b3f83de3|6a52d970|2287ae90|a3ba8f33|b37eb259");
@@ -45,8 +66,17 @@ class AttribuerCadeauxTest {
     private static final Pattern REGEX_REF_CADEAUX_TRANCHE_AGE_50_60 = Pattern.compile("f14f767d|9393cf65|6082f1f6|e72cfae4|7b22a16f");
     private static final Pattern REGEX_REF_CADEAUX_TRANCHE_AGE_60_150 = Pattern.compile("b9dcca0d|90a2efeb|67f53023|0200ddd6|d9860e8d");
 
+    private static final LocalDate NOW = LocalDate.of(2018, 10, 1);
+    private static final LocalDate NOW_MINUS_ONE_YEAR = LocalDate.of(2017, 10, 1);
+
+    @BeforeEach
+    void setUp() {
+        Clock clock = Clock.fixed(Instant.parse("2018-10-01T10:15:30.00Z"), ZoneId.of("Europe/Paris"));
+        attribuerCadeaux.setClock(clock);
+    }
+
     @Test
-    void attribuerCadeaux_habitantTrancheAge0_3() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge0_3() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Paron";
@@ -56,20 +86,19 @@ class AttribuerCadeauxTest {
         LocalDate dateArriveeCommune = LocalDate.of(2017, 5, 1);
         String adressePostale = "48 faubourg de la Plage";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
-        doReturn(newArrayList(habitant))
-                .when(habitantProvider)
-                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(newArrayList(habitant)).when(habitantProvider).getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(CADEAUX_BY_TRANCHE_AGE).when(cadeauxByTrancheAgeProvider).get();
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
-        verifyEmailsSent("elise.paron@example.fr", "Elise Paron", REGEX_REF_CADEAUX_TRANCHE_AGE_0_3);
+        verifyNotificationsSent("elise.paron@example.fr", "Elise Paron", REGEX_REF_CADEAUX_TRANCHE_AGE_0_3);
         verifyHabitantSaved(REGEX_REF_CADEAUX_TRANCHE_AGE_0_3);
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge3_6() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge3_6() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Giron";
@@ -79,20 +108,19 @@ class AttribuerCadeauxTest {
         LocalDate dateArriveeCommune = LocalDate.of(2017, 5, 1);
         String adressePostale = "2 rue des Apotres";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
-        doReturn(newArrayList(habitant))
-                .when(habitantProvider)
-                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(newArrayList(habitant)).when(habitantProvider).getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(CADEAUX_BY_TRANCHE_AGE).when(cadeauxByTrancheAgeProvider).get();
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
-        verifyEmailsSent("manon.giron@example.fr", "Manon Giron", REGEX_REF_CADEAUX_TRANCHE_AGE_3_6);
+        verifyNotificationsSent("manon.giron@example.fr", "Manon Giron", REGEX_REF_CADEAUX_TRANCHE_AGE_3_6);
         verifyHabitantSaved(REGEX_REF_CADEAUX_TRANCHE_AGE_3_6);
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge6_10() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge6_10() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Perraud";
@@ -102,20 +130,19 @@ class AttribuerCadeauxTest {
         LocalDate dateArriveeCommune = LocalDate.of(2017, 9, 10);
         String adressePostale = "17 boulevard des Capucines";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
-        doReturn(newArrayList(habitant))
-                .when(habitantProvider)
-                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(newArrayList(habitant)).when(habitantProvider).getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(CADEAUX_BY_TRANCHE_AGE).when(cadeauxByTrancheAgeProvider).get();
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
-        verifyEmailsSent("lucas.perraud@example.fr", "Lucas Perraud", REGEX_REF_CADEAUX_TRANCHE_AGE_6_10);
+        verifyNotificationsSent("lucas.perraud@example.fr", "Lucas Perraud", REGEX_REF_CADEAUX_TRANCHE_AGE_6_10);
         verifyHabitantSaved(REGEX_REF_CADEAUX_TRANCHE_AGE_6_10);
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge10_15() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge10_15() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Leduc";
@@ -125,20 +152,19 @@ class AttribuerCadeauxTest {
         LocalDate dateArriveeCommune = LocalDate.of(2017, 9, 10);
         String adressePostale = "28 square du Bois Fleuri";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
-        doReturn(newArrayList(habitant))
-                .when(habitantProvider)
-                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(newArrayList(habitant)).when(habitantProvider).getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(CADEAUX_BY_TRANCHE_AGE).when(cadeauxByTrancheAgeProvider).get();
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
-        verifyEmailsSent("etienne.leduc@example.fr", "Etienne Leduc", REGEX_REF_CADEAUX_TRANCHE_AGE_10_15);
+        verifyNotificationsSent("etienne.leduc@example.fr", "Etienne Leduc", REGEX_REF_CADEAUX_TRANCHE_AGE_10_15);
         verifyHabitantSaved(REGEX_REF_CADEAUX_TRANCHE_AGE_10_15);
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge15_20() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge15_20() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Guilbaud";
@@ -148,20 +174,19 @@ class AttribuerCadeauxTest {
         LocalDate dateArriveeCommune = LocalDate.of(2017, 10, 1);
         String adressePostale = "1 impasse du Cheval Blanc";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
-        doReturn(newArrayList(habitant))
-                .when(habitantProvider)
-                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(newArrayList(habitant)).when(habitantProvider).getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(CADEAUX_BY_TRANCHE_AGE).when(cadeauxByTrancheAgeProvider).get();
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
-        verifyEmailsSent("elodie.guilbaud@example.fr", "Elodie Guilbaud", REGEX_REF_CADEAUX_TRANCHE_AGE_15_20);
+        verifyNotificationsSent("elodie.guilbaud@example.fr", "Elodie Guilbaud", REGEX_REF_CADEAUX_TRANCHE_AGE_15_20);
         verifyHabitantSaved(REGEX_REF_CADEAUX_TRANCHE_AGE_15_20);
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge20_30() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge20_30() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Newman";
@@ -171,20 +196,19 @@ class AttribuerCadeauxTest {
         LocalDate dateArriveeCommune = LocalDate.of(2017, 10, 1);
         String adressePostale = "14 chemin Edmond Rostand";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
-        doReturn(newArrayList(habitant))
-                .when(habitantProvider)
-                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(newArrayList(habitant)).when(habitantProvider).getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(CADEAUX_BY_TRANCHE_AGE).when(cadeauxByTrancheAgeProvider).get();
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
-        verifyEmailsSent("paul.newman@example.fr", "Paul Newman", REGEX_REF_CADEAUX_TRANCHE_AGE_20_30);
+        verifyNotificationsSent("paul.newman@example.fr", "Paul Newman", REGEX_REF_CADEAUX_TRANCHE_AGE_20_30);
         verifyHabitantSaved(REGEX_REF_CADEAUX_TRANCHE_AGE_20_30);
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge30_40() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge30_40() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Carin";
@@ -194,20 +218,19 @@ class AttribuerCadeauxTest {
         LocalDate dateArriveeCommune = LocalDate.of(2016, 12, 1);
         String adressePostale = "12 rue des Lilas";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
-        doReturn(newArrayList(habitant))
-                .when(habitantProvider)
-                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(newArrayList(habitant)).when(habitantProvider).getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(CADEAUX_BY_TRANCHE_AGE).when(cadeauxByTrancheAgeProvider).get();
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
-        verifyEmailsSent("marie.carin@example.fr", "Marie Carin", REGEX_REF_CADEAUX_TRANCHE_AGE_30_40);
+        verifyNotificationsSent("marie.carin@example.fr", "Marie Carin", REGEX_REF_CADEAUX_TRANCHE_AGE_30_40);
         verifyHabitantSaved(REGEX_REF_CADEAUX_TRANCHE_AGE_30_40);
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge40_50() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge40_50() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Dumond";
@@ -217,20 +240,19 @@ class AttribuerCadeauxTest {
         LocalDate dateArriveeCommune = LocalDate.of(2016, 12, 1);
         String adressePostale = "18 square de Crusoe";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
-        doReturn(newArrayList(habitant))
-                .when(habitantProvider)
-                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(newArrayList(habitant)).when(habitantProvider).getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(CADEAUX_BY_TRANCHE_AGE).when(cadeauxByTrancheAgeProvider).get();
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
-        verifyEmailsSent("michel.dumond@example.fr", "Michel Dumond", REGEX_REF_CADEAUX_TRANCHE_AGE_40_50);
+        verifyNotificationsSent("michel.dumond@example.fr", "Michel Dumond", REGEX_REF_CADEAUX_TRANCHE_AGE_40_50);
         verifyHabitantSaved(REGEX_REF_CADEAUX_TRANCHE_AGE_40_50);
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge50_60() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge50_60() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Avro";
@@ -240,20 +262,19 @@ class AttribuerCadeauxTest {
         LocalDate dateArriveeCommune = LocalDate.of(2016, 12, 1);
         String adressePostale = "15 rue Apigi";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
-        doReturn(newArrayList(habitant))
-                .when(habitantProvider)
-                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(newArrayList(habitant)).when(habitantProvider).getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(CADEAUX_BY_TRANCHE_AGE).when(cadeauxByTrancheAgeProvider).get();
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
-        verifyEmailsSent("julien.avro@example.fr", "Julien Avro", REGEX_REF_CADEAUX_TRANCHE_AGE_50_60);
+        verifyNotificationsSent("julien.avro@example.fr", "Julien Avro", REGEX_REF_CADEAUX_TRANCHE_AGE_50_60);
         verifyHabitantSaved(REGEX_REF_CADEAUX_TRANCHE_AGE_50_60);
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge60_150() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge60_150() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Pascalin";
@@ -263,19 +284,18 @@ class AttribuerCadeauxTest {
         LocalDate dateArriveeCommune = LocalDate.of(2016, 12, 1);
         String adressePostale = "";
         Habitant habitant = new Habitant(id, nom, prenom, email, dateNaissance, dateArriveeCommune, adressePostale);
-        doReturn(newArrayList(habitant))
-                .when(habitantProvider)
-                .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(newArrayList(habitant)).when(habitantProvider).getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
+        doReturn(CADEAUX_BY_TRANCHE_AGE).when(cadeauxByTrancheAgeProvider).get();
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
-        verifyEmailsSent("yvette.pascalin@example.fr", "Yvette Pascalin", REGEX_REF_CADEAUX_TRANCHE_AGE_60_150);
+        verifyNotificationsSent("yvette.pascalin@example.fr", "Yvette Pascalin", REGEX_REF_CADEAUX_TRANCHE_AGE_60_150);
         verifyHabitantSaved(REGEX_REF_CADEAUX_TRANCHE_AGE_60_150);
     }
 
-    private void verifyEmailsSent(String destinataireHabitant, String nom, Pattern regExpRefCadeau) {
+    private void verifyNotificationsSent(String destinataireHabitant, String nom, Pattern regExpRefCadeau) {
         ArgumentCaptor<String> toCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> subjectCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> bodyCaptor = ArgumentCaptor.forClass(String.class);
@@ -291,7 +311,6 @@ class AttribuerCadeauxTest {
         assertThat(subjectCaptor.getAllValues().get(1)).isEqualTo("01/10/2018 - Synthese des cadeaux pour envoi");
         assertThat(bodyCaptor.getAllValues().get(1)).contains(nom);
         assertThat(bodyCaptor.getAllValues().get(1)).containsPattern(regExpRefCadeau);
-
     }
 
     private void verifyHabitantSaved(Pattern regExpRefCadeau) {
@@ -301,5 +320,6 @@ class AttribuerCadeauxTest {
         assertThat(habitantSaved.getCadeauOffert()).containsPattern(regExpRefCadeau);
         assertThat(habitantSaved.getDateAttributionCadeau()).isEqualTo(NOW);
     }
+
 }
 
