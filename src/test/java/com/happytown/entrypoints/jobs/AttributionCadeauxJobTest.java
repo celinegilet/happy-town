@@ -28,8 +28,6 @@ class AttributionCadeauxJobTest {
     void execute_shouldTriggerAttribuerCadeauxUseCase() throws IOException, MessagingException {
         // Given
         String fileName = "src/main/resources/cadeaux.txt";
-        String smtpHost = "localhost";
-        int smtpPort = 2525;
 
         // When
         attributionCadeauxJob.execute();
@@ -38,9 +36,7 @@ class AttributionCadeauxJobTest {
         verify(attribuerCadeaux)
                 .execute(
                         eq(fileName),
-                        any(LocalDate.class),
-                        eq(smtpHost),
-                        eq(smtpPort)
+                        any(LocalDate.class)
                 );
     }
 }

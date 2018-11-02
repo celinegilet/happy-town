@@ -1,10 +1,6 @@
 package com.happytown.core.use_cases;
 
-import com.dumbster.smtp.SimpleSmtpServer;
-import com.dumbster.smtp.SmtpMessage;
 import com.happytown.core.entities.Habitant;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -15,14 +11,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Iterator;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.util.Lists.newArrayList;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AttribuerCadeauxTest {
@@ -33,10 +27,9 @@ class AttribuerCadeauxTest {
     @Mock
     HabitantProvider habitantProvider;
 
-    private SimpleSmtpServer mailServer;
+    @Mock
+    NotificationProvider notificationProvider;
 
-    private static final int SMTP_PORT = 9999;
-    private static final String SMTP_HOST = "localhost";
     private static final String FILE_NAME = "src/main/resources/cadeaux.txt";
     private static final LocalDate NOW = LocalDate.of(2018, 10, 1);
     private static final LocalDate NOW_MINUS_ONE_YEAR = LocalDate.of(2017, 10, 1);
@@ -51,17 +44,6 @@ class AttribuerCadeauxTest {
     private static final Pattern REGEX_REF_CADEAUX_TRANCHE_AGE_40_50 = Pattern.compile("dd1954e8|a40d837a|40a88a96|6e40b52d|7c5e8641");
     private static final Pattern REGEX_REF_CADEAUX_TRANCHE_AGE_50_60 = Pattern.compile("f14f767d|9393cf65|6082f1f6|e72cfae4|7b22a16f");
     private static final Pattern REGEX_REF_CADEAUX_TRANCHE_AGE_60_150 = Pattern.compile("b9dcca0d|90a2efeb|67f53023|0200ddd6|d9860e8d");
-
-    @BeforeEach
-    void setUp() {
-        mailServer = SimpleSmtpServer.start(SMTP_PORT);
-    }
-
-    @AfterEach
-    void tearDown() throws InterruptedException {
-        mailServer.stop();
-        Thread.sleep(2000);
-    }
 
     @Test
     void attribuerCadeaux_habitantTrancheAge0_3() throws IOException, MessagingException {
@@ -79,7 +61,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW);
 
         // Then
         verifyEmailsSent("elise.paron@example.fr", "Elise Paron", REGEX_REF_CADEAUX_TRANCHE_AGE_0_3);
@@ -102,7 +84,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW);
 
         // Then
         verifyEmailsSent("manon.giron@example.fr", "Manon Giron", REGEX_REF_CADEAUX_TRANCHE_AGE_3_6);
@@ -125,7 +107,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW);
 
         // Then
         verifyEmailsSent("lucas.perraud@example.fr", "Lucas Perraud", REGEX_REF_CADEAUX_TRANCHE_AGE_6_10);
@@ -148,7 +130,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW);
 
         // Then
         verifyEmailsSent("etienne.leduc@example.fr", "Etienne Leduc", REGEX_REF_CADEAUX_TRANCHE_AGE_10_15);
@@ -171,7 +153,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW);
 
         // Then
         verifyEmailsSent("elodie.guilbaud@example.fr", "Elodie Guilbaud", REGEX_REF_CADEAUX_TRANCHE_AGE_15_20);
@@ -194,7 +176,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW);
 
         // Then
         verifyEmailsSent("paul.newman@example.fr", "Paul Newman", REGEX_REF_CADEAUX_TRANCHE_AGE_20_30);
@@ -217,7 +199,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW);
 
         // Then
         verifyEmailsSent("marie.carin@example.fr", "Marie Carin", REGEX_REF_CADEAUX_TRANCHE_AGE_30_40);
@@ -240,7 +222,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW);
 
         // Then
         verifyEmailsSent("michel.dumond@example.fr", "Michel Dumond", REGEX_REF_CADEAUX_TRANCHE_AGE_40_50);
@@ -263,7 +245,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW);
 
         // Then
         verifyEmailsSent("julien.avro@example.fr", "Julien Avro", REGEX_REF_CADEAUX_TRANCHE_AGE_50_60);
@@ -286,7 +268,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW);
 
         // Then
         verifyEmailsSent("yvette.pascalin@example.fr", "Yvette Pascalin", REGEX_REF_CADEAUX_TRANCHE_AGE_60_150);
@@ -294,24 +276,22 @@ class AttribuerCadeauxTest {
     }
 
     private void verifyEmailsSent(String destinataireHabitant, String nom, Pattern regExpRefCadeau) {
-        assertThat(mailServer.getReceivedEmailSize()).isEqualTo(2);
-        Iterator emails = mailServer.getReceivedEmail();
+        ArgumentCaptor<String> toCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> subjectCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> bodyCaptor = ArgumentCaptor.forClass(String.class);
 
-        SmtpMessage mailHabitant = (SmtpMessage) emails.next();
-        String[] destinatairesHabitant = mailHabitant.getHeaderValues("To");
-        assertThat(destinatairesHabitant.length).isEqualTo(1);
-        assertThat(destinatairesHabitant[0]).isEqualTo(destinataireHabitant);
-        assertThat(mailHabitant.getHeaderValue("Subject")).isEqualTo("Happy Birthday in HappyTown!");
-        assertThat(mailHabitant.getBody()).contains(nom);
-        assertThat(mailHabitant.getBody()).containsPattern(regExpRefCadeau);
+        verify(notificationProvider, times(2)).notifier(toCaptor.capture(), subjectCaptor.capture(), bodyCaptor.capture());
 
-        SmtpMessage mailMairieServiceCadeau = (SmtpMessage) emails.next();
-        String[] destinatairesMairieServiceCadeau = mailMairieServiceCadeau.getHeaderValues("To");
-        assertThat(destinatairesMairieServiceCadeau.length).isEqualTo(1);
-        assertThat(destinatairesMairieServiceCadeau[0]).isEqualTo("mairie+service-cadeau@happytown.com");
-        assertThat(mailMairieServiceCadeau.getHeaderValue("Subject")).isEqualTo("01/10/2018 - Synthese des cadeaux pour envoi");
-        assertThat(mailMairieServiceCadeau.getBody()).contains(nom);
-        assertThat(mailMairieServiceCadeau.getBody()).containsPattern(regExpRefCadeau);
+        assertThat(toCaptor.getAllValues().get(0)).isEqualTo(destinataireHabitant);
+        assertThat(subjectCaptor.getAllValues().get(0)).isEqualTo("Happy Birthday in HappyTown!");
+        assertThat(bodyCaptor.getAllValues().get(0)).contains(nom);
+        assertThat(bodyCaptor.getAllValues().get(0)).containsPattern(regExpRefCadeau);
+
+        assertThat(toCaptor.getAllValues().get(1)).isEqualTo("mairie+service-cadeau@happytown.com");
+        assertThat(subjectCaptor.getAllValues().get(1)).isEqualTo("01/10/2018 - Synthese des cadeaux pour envoi");
+        assertThat(bodyCaptor.getAllValues().get(1)).contains(nom);
+        assertThat(bodyCaptor.getAllValues().get(1)).containsPattern(regExpRefCadeau);
+
     }
 
     private void verifyHabitantSaved(Pattern regExpRefCadeau) {

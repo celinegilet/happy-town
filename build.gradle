@@ -6,7 +6,7 @@ plugins {
 
 ext {
     assertjVersion = '3.12.2'
-    dumbsterVersion = '1.6'
+    fakesmtpVersion = '0.1.1'
     h2Version = '1.4.199'
     junitVersion = '5.4.1'
     logbackVersion = '1.2.3'
@@ -50,8 +50,9 @@ dependencies {
     testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
     testImplementation "org.assertj:assertj-core:${assertjVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-migrationsupport:${junitVersion}"
+    testCompile "com.github.sleroy:fakesmtp-junit-runner:${fakesmtpVersion}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
-    testImplementation "dumbster:dumbster:${dumbsterVersion}"
 }
 
 test {
