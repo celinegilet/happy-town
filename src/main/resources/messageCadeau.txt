@@ -1,0 +1,7 @@
+Bonjour #prenom #nom,
+
+Félicitations, pour fêter votre premier anniversaire dans notre merveilleuse ville HappyTown, la mairie a le plaisir de vous offrir un cadeau de bienvenue.
+
+Votre cadeau est : #cadeau
+
+L'équipe HappyTown

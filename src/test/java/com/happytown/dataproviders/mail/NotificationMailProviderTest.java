@@ -14,6 +14,8 @@ import org.springframework.test.context.TestPropertySource;
 import javax.mail.MessagingException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static javax.mail.internet.MimeUtility.decode;
@@ -40,10 +42,14 @@ class NotificationMailProviderTest {
         // Given
         String to = "camille.moulin@example.fr";
         String subject = "Happy Birthday in HappyTown!";
-        String body = "Un cadeau va vous être envoyé";
+        String templatePath = "src/main/resources/messageCadeau.txt";
+        Map<String, String> templateArgs = new HashMap<>();
+        templateArgs.put("prenom", "Camille");
+        templateArgs.put("nom", "Moulin");
+        templateArgs.put("cadeau", "Peluche souris étoile (Montant : 24.99€ - Référence : a3d832e5)");
 
         // When
-        notificationMailProvider.notifier(to, subject, body);
+        notificationMailProvider.notifier(to, subject, templatePath, templateArgs);
 
         // Then
         EmailModel email = smtpServer.mailBox().get(0);
@@ -54,6 +60,9 @@ class NotificationMailProviderTest {
         assertThat(email.getFrom()).isEqualTo("mairie@happytown.com");
         assertThat(email.getTo()).isEqualTo(to);
         assertThat(email.getSubject()).isEqualTo(subject);
-        assertThat(emailStr).contains(body);
+        assertThat(emailStr).contains("Bonjour Camille Moulin,\n\n" +
+                "Félicitations, pour fêter votre premier anniversaire dans notre merveilleuse ville HappyTown, la mairie a le plaisir de vous offrir un cadeau de bienvenue.\n\n" +
+                "Votre cadeau est : Peluche souris étoile (Montant : 24.99€ - Référence : a3d832e5)\n\n" +
+                "L'équipe HappyTown");
     }
 }
