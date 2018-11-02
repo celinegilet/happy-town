@@ -1,4 +1,4 @@
-package com.happytown.configuration;
+package com.happytown.entrypoints.jobs;
 
 import com.happytown.core.use_cases.AttribuerCadeaux;
 import org.slf4j.Logger;
@@ -13,20 +13,20 @@ import java.time.LocalDate;
 
 @Configuration
 @EnableScheduling
-public class ScheduleTasks {
+public class AttributionCadeauxJob {
 
     private final AttribuerCadeaux attribuerCadeaux;
 
     private static final String SMTP_HOST = "localhost";
     private static final int SMTP_PORT = 2525;
-    private static final Logger LOGGER = LoggerFactory.getLogger(ScheduleTasks.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AttributionCadeauxJob.class);
 
-    public ScheduleTasks(AttribuerCadeaux attribuerCadeaux) {
+    public AttributionCadeauxJob(AttribuerCadeaux attribuerCadeaux) {
         this.attribuerCadeaux = attribuerCadeaux;
     }
 
     @Scheduled(cron = "0 0/2 * * * *")
-    public void attribuerCadeaux() throws IOException, MessagingException {
+    public void execute() throws IOException, MessagingException {
         LOGGER.info("Start Task execute");
         String fileName = "src/main/resources/cadeaux.txt";
         LocalDate now = LocalDate.now();
