@@ -40,16 +40,15 @@ public class HabitantDatabaseAdapter implements HabitantPort {
     }
 
     private Habitant toHabitant(HabitantJpa habitantJpa) {
-        Habitant habitant = new Habitant();
-        habitant.setId(habitantJpa.getId());
-        habitant.setNom(habitantJpa.getNom());
-        habitant.setPrenom(habitantJpa.getPrenom());
-        habitant.setEmail(habitantJpa.getEmail());
-        habitant.setDateNaissance(habitantJpa.getDateNaissance());
-        habitant.setDateArriveeCommune(habitantJpa.getDateArriveeCommune());
-        habitant.setAdressePostale(habitantJpa.getAdressePostale());
-        habitant.setCadeauOffert(habitantJpa.getCadeauOffert());
-        habitant.setDateAttributionCadeau(habitantJpa.getDateAttributionCadeau());
+        Habitant habitant = new Habitant(
+                habitantJpa.getId(),
+                habitantJpa.getNom(),
+                habitantJpa.getPrenom(),
+                habitantJpa.getEmail(),
+                habitantJpa.getDateNaissance(),
+                habitantJpa.getDateArriveeCommune(),
+                habitantJpa.getAdressePostale());
+        habitant.attribuerCadeau(habitantJpa.getCadeauOffert(), habitantJpa.getDateAttributionCadeau());
         return habitant;
     }
 
