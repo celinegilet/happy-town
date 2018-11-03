@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import javax.mail.MessagingException;
 import java.io.IOException;
 import java.time.LocalDate;
 
@@ -17,8 +16,6 @@ public class AttributionCadeauxJobAdapter {
 
     private final AttribuerCadeaux attribuerCadeaux;
 
-    private static final String SMTP_HOST = "localhost";
-    private static final int SMTP_PORT = 2525;
     private static final Logger LOGGER = LoggerFactory.getLogger(AttributionCadeauxJobAdapter.class);
 
     public AttributionCadeauxJobAdapter(AttribuerCadeaux attribuerCadeaux) {
@@ -26,11 +23,11 @@ public class AttributionCadeauxJobAdapter {
     }
 
     @Scheduled(cron = "0 0/2 * * * *")
-    public void execute() throws IOException, MessagingException {
+    public void execute() throws IOException {
         LOGGER.info("Start Task execute");
         String fileName = "src/main/resources/cadeaux.txt";
         LocalDate now = LocalDate.now();
-        attribuerCadeaux.execute(fileName, now, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(fileName, now);
         LOGGER.info("End Task execute");
     }
 }
