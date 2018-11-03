@@ -1,9 +1,8 @@
-package com.happytown.service;
+package com.happytown.domain.use_cases;
 
+import com.google.common.collect.Lists;
 import com.happytown.domain.entities.Habitant;
-import com.happytown.domain.use_cases.HabitantPort;
 import com.happytown.fixtures.HabitantFixture;
-import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,26 +11,26 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
-class HabitantServiceTest {
+class GetAllHabitantsTest {
 
     @InjectMocks
-    HabitantService habitantService;
+    GetAllHabitants getAllHabitants;
 
     @Mock
     HabitantPort habitantPort;
 
     @Test
-    void getAll_shouldReturnAllHabitants() {
+    void execute_shouldReturnHabitantsFromProvider() {
         // Given
         List<Habitant> habitants = Lists.newArrayList(HabitantFixture.aHabitant());
         doReturn(habitants).when(habitantPort).getAll();
 
         // When
-        List<Habitant> results = habitantService.getAll();
+        List<Habitant> results = getAllHabitants.execute();
 
         // Then
         assertThat(results).containsExactlyElementsOf(habitants);

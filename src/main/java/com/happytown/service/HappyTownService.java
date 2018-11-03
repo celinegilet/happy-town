@@ -3,7 +3,7 @@ package com.happytown.service;
 import com.happytown.domain.entities.Cadeau;
 import com.happytown.domain.entities.Habitant;
 import com.happytown.domain.entities.TrancheAge;
-import com.happytown.repository.HabitantRepository;
+import com.happytown.domain.use_cases.HabitantPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,19 +25,18 @@ import java.util.*;
 @Transactional
 public class HappyTownService {
 
-    private final HabitantRepository habitantRepository;
+    private final HabitantPort habitantPort;
     private final Random random;
 
-    public HappyTownService(HabitantRepository habitantRepository) {
-        this.habitantRepository = habitantRepository;
+    public HappyTownService(HabitantPort habitantPort) {
+        this.habitantPort = habitantPort;
         random = new Random();
     }
 
     public void attribuerCadeaux(String fileName, LocalDate dateCourante, String smtpHost, int smtpPort) throws IOException, MessagingException {
 
         Map<TrancheAge, List<Cadeau>> cadeauxByTrancheAge = buildCadeauxByTrancheAge(fileName);
-        List<Habitant> habitantsEligibles = habitantRepository.
-                findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(dateCourante.minusYears(1));
+        List<Habitant> habitantsEligibles = habitantPort.getEligiblesCadeaux(dateCourante.minusYears(1));
         List<Habitant> habitantsAttributionCadeau = new ArrayList<>();
 
         for (Habitant habitant : habitantsEligibles) {
@@ -48,7 +47,7 @@ public class HappyTownService {
                 envoiMessage(smtpHost, smtpPort, habitant, randomCadeau);
                 habitant.setCadeauOffert(randomCadeau.getDetail());
                 habitant.setDateAttributionCadeau(dateCourante);
-                habitantRepository.save(habitant);
+                habitantPort.save(habitant);
                 habitantsAttributionCadeau.add(habitant);
             }
         }

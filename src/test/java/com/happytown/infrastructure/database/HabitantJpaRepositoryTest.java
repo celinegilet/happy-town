@@ -1,6 +1,5 @@
-package com.happytown.repository;
+package com.happytown.infrastructure.database;
 
-import com.happytown.domain.entities.Habitant;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,22 +10,22 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-class HabitantRepositoryIntegrationTest {
+class HabitantJpaRepositoryTest {
 
     @Autowired
     TestEntityManager testEntityManager;
 
     @Autowired
-    HabitantRepository habitantRepository;
+    HabitantJpaRepository habitantJpaRepository;
 
     @Test
     void findAll_shouldReturnAllHabitantsOfHappyTown() {
         // When
-        List<Habitant> habitants = habitantRepository.findAll();
+        List<HabitantJpa> habitants = habitantJpaRepository.findAll();
 
         // Then
         assertThat(habitants).hasSize(3);
@@ -35,16 +34,17 @@ class HabitantRepositoryIntegrationTest {
     @Test
     void findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNull() {
         // Given
-        Habitant firstHabitant = testEntityManager.find(Habitant.class, "5e18367a-1eb3-4b91-b87a-44cd210ef7ba");
-        Habitant secondHabitant = testEntityManager.find(Habitant.class, "aebb21fa-b981-4baa-9668-52be5ea3ce90");
+        HabitantJpa firstHabitant = testEntityManager.find(HabitantJpa.class, "5e18367a-1eb3-4b91-b87a-44cd210ef7ba");
+        HabitantJpa secondHabitant = testEntityManager.find(HabitantJpa.class, "aebb21fa-b981-4baa-9668-52be5ea3ce90");
         LocalDate dateArriveeCommune = LocalDate.now().minusYears(1);
 
         // When
-        List<Habitant> habitants = habitantRepository.findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(dateArriveeCommune);
+        List<HabitantJpa> habitants = habitantJpaRepository.findByDateArriveeCommuneLessThanEqualAndCadeauOffertIsNullAndDateAttributionCadeauIsNullOrderByDateArriveeCommune(dateArriveeCommune);
 
         // Then
         assertThat(habitants).hasSize(2);
         assertThat(habitants.get(0)).isEqualToComparingFieldByField(firstHabitant);
         assertThat(habitants.get(1)).isEqualToComparingFieldByField(secondHabitant);
     }
+
 }
