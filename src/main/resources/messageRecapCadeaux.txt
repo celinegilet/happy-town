@@ -1,0 +1,6 @@
+Bonjour,
+
+Voici la liste récapitulative des cadeaux du jour :
+#cadeaux
+
+Merci!

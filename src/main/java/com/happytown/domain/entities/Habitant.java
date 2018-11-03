@@ -29,6 +29,10 @@ public class Habitant {
         this.dateAttributionCadeau = dateAttributionCadeau;
     }
 
+    public Boolean hasCadeau() {
+        return this.cadeauOffert != null && this.dateAttributionCadeau != null;
+    }
+
     public String getId() {
         return id;
     }
