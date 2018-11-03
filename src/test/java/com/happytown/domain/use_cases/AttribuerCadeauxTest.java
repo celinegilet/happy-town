@@ -1,9 +1,8 @@
-package com.happytown.service;
+package com.happytown.domain.use_cases;
 
 import com.dumbster.smtp.SimpleSmtpServer;
 import com.dumbster.smtp.SmtpMessage;
 import com.happytown.domain.entities.Habitant;
-import com.happytown.domain.use_cases.HabitantPort;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,10 +25,10 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class HappyTownServiceTest {
+class AttribuerCadeauxTest {
 
     @InjectMocks
-    HappyTownService happyTownService;
+    AttribuerCadeaux attribuerCadeaux;
 
     @Mock
     HabitantPort habitantPort;
@@ -80,7 +79,7 @@ class HappyTownServiceTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
 
         // Then
         verifyEmailsSent("elise.paron@example.fr", "Elise Paron", REGEX_REF_CADEAUX_TRANCHE_AGE_0_3);
@@ -103,7 +102,7 @@ class HappyTownServiceTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
 
         // Then
         verifyEmailsSent("manon.giron@example.fr", "Manon Giron", REGEX_REF_CADEAUX_TRANCHE_AGE_3_6);
@@ -126,7 +125,7 @@ class HappyTownServiceTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
 
         // Then
         verifyEmailsSent("lucas.perraud@example.fr", "Lucas Perraud", REGEX_REF_CADEAUX_TRANCHE_AGE_6_10);
@@ -149,7 +148,7 @@ class HappyTownServiceTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
 
         // Then
         verifyEmailsSent("etienne.leduc@example.fr", "Etienne Leduc", REGEX_REF_CADEAUX_TRANCHE_AGE_10_15);
@@ -172,7 +171,7 @@ class HappyTownServiceTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
 
         // Then
         verifyEmailsSent("elodie.guilbaud@example.fr", "Elodie Guilbaud", REGEX_REF_CADEAUX_TRANCHE_AGE_15_20);
@@ -195,7 +194,7 @@ class HappyTownServiceTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
 
         // Then
         verifyEmailsSent("paul.newman@example.fr", "Paul Newman", REGEX_REF_CADEAUX_TRANCHE_AGE_20_30);
@@ -218,7 +217,7 @@ class HappyTownServiceTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
 
         // Then
         verifyEmailsSent("marie.carin@example.fr", "Marie Carin", REGEX_REF_CADEAUX_TRANCHE_AGE_30_40);
@@ -241,7 +240,7 @@ class HappyTownServiceTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
 
         // Then
         verifyEmailsSent("michel.dumond@example.fr", "Michel Dumond", REGEX_REF_CADEAUX_TRANCHE_AGE_40_50);
@@ -264,7 +263,7 @@ class HappyTownServiceTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
 
         // Then
         verifyEmailsSent("julien.avro@example.fr", "Julien Avro", REGEX_REF_CADEAUX_TRANCHE_AGE_50_60);
@@ -287,7 +286,7 @@ class HappyTownServiceTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        happyTownService.attribuerCadeaux(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
+        attribuerCadeaux.execute(FILE_NAME, NOW, SMTP_HOST, SMTP_PORT);
 
         // Then
         verifyEmailsSent("yvette.pascalin@example.fr", "Yvette Pascalin", REGEX_REF_CADEAUX_TRANCHE_AGE_60_150);

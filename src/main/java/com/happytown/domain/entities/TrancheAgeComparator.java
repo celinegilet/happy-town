@@ -1,6 +1,4 @@
-package com.happytown.service;
-
-import com.happytown.domain.entities.TrancheAge;
+package com.happytown.domain.entities;
 
 import java.util.Comparator;
 

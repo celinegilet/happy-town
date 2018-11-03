@@ -1,11 +1,10 @@
-package com.happytown.service;
+package com.happytown.domain.use_cases;
 
 import com.happytown.domain.entities.Cadeau;
 import com.happytown.domain.entities.Habitant;
 import com.happytown.domain.entities.TrancheAge;
-import com.happytown.domain.use_cases.HabitantPort;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.happytown.domain.entities.TrancheAgeComparator;
+import org.springframework.stereotype.Component;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -21,19 +20,18 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
 
-@Service
-@Transactional
-public class HappyTownService {
+@Component
+public class AttribuerCadeaux {
 
     private final HabitantPort habitantPort;
     private final Random random;
 
-    public HappyTownService(HabitantPort habitantPort) {
+    public AttribuerCadeaux(HabitantPort habitantPort) {
         this.habitantPort = habitantPort;
         random = new Random();
     }
 
-    public void attribuerCadeaux(String fileName, LocalDate dateCourante, String smtpHost, int smtpPort) throws IOException, MessagingException {
+    public void execute(String fileName, LocalDate dateCourante, String smtpHost, int smtpPort) throws IOException, MessagingException {
 
         Map<TrancheAge, List<Cadeau>> cadeauxByTrancheAge = buildCadeauxByTrancheAge(fileName);
         List<Habitant> habitantsEligibles = habitantPort.getEligiblesCadeaux(dateCourante.minusYears(1));
