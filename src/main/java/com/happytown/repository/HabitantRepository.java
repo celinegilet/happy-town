@@ -1,6 +1,6 @@
 package com.happytown.repository;
 
-import com.happytown.domain.Habitant;
+import com.happytown.domain.entities.Habitant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

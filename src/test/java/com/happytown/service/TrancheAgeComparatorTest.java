@@ -1,13 +1,12 @@
 package com.happytown.service;
 
-import com.happytown.domain.TrancheAge;
+import com.happytown.domain.entities.TrancheAge;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 import java.util.TreeSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class TrancheAgeComparatorTest {
 

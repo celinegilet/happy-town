@@ -1,6 +1,6 @@
 package com.happytown.service;
 
-import com.happytown.domain.Habitant;
+import com.happytown.domain.entities.Habitant;
 import com.happytown.repository.HabitantRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

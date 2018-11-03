@@ -1,8 +1,8 @@
 package com.happytown.service;
 
-import com.happytown.domain.Cadeau;
-import com.happytown.domain.Habitant;
-import com.happytown.domain.TrancheAge;
+import com.happytown.domain.entities.Cadeau;
+import com.happytown.domain.entities.Habitant;
+import com.happytown.domain.entities.TrancheAge;
 import com.happytown.repository.HabitantRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

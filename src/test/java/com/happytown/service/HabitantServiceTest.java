@@ -1,6 +1,6 @@
 package com.happytown.service;
 
-import com.happytown.domain.Habitant;
+import com.happytown.domain.entities.Habitant;
 import com.happytown.fixtures.HabitantFixture;
 import com.happytown.repository.HabitantRepository;
 import org.assertj.core.util.Lists;
