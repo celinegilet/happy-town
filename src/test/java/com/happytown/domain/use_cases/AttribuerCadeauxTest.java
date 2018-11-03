@@ -1,6 +1,10 @@
 package com.happytown.domain.use_cases;
 
+import com.happytown.domain.entities.Cadeau;
 import com.happytown.domain.entities.Habitant;
+import com.happytown.domain.entities.TrancheAge;
+import com.happytown.infrastructure.file.CadeauxByTrancheAgeFileAdapter;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -8,9 +12,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.mail.MessagingException;
-import java.io.IOException;
+import java.lang.reflect.Field;
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -30,9 +39,21 @@ class AttribuerCadeauxTest {
     @Mock
     NotificationPort notificationPort;
 
-    private static final String FILE_NAME = "src/main/resources/cadeaux.txt";
-    private static final LocalDate NOW = LocalDate.of(2018, 10, 1);
-    private static final LocalDate NOW_MINUS_ONE_YEAR = LocalDate.of(2017, 10, 1);
+    @Mock
+    CadeauxByTrancheAgePort cadeauxByTrancheAgePort;
+
+    private static Map<TrancheAge, List<Cadeau>> CADEAUX_BY_TRANCHE_AGE = new TreeMap<>();
+    static {
+        CadeauxByTrancheAgeFileAdapter cadeauxByTrancheAgeFileAdapter = new CadeauxByTrancheAgeFileAdapter();
+        try {
+            Field pathFileCadeauxByTrancheAge = CadeauxByTrancheAgeFileAdapter.class.getDeclaredField("pathFileCadeauxByTrancheAge");
+            pathFileCadeauxByTrancheAge.setAccessible(true);
+            pathFileCadeauxByTrancheAge.set(cadeauxByTrancheAgeFileAdapter, "src/main/resources/cadeaux.txt");
+            CADEAUX_BY_TRANCHE_AGE = cadeauxByTrancheAgeFileAdapter.get();
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 
     private static final Pattern REGEX_REF_CADEAUX_TRANCHE_AGE_0_3 = Pattern.compile("70d73d02|c01c31a3|fc02d2df|66418d5b|a3d832e5");
     private static final Pattern REGEX_REF_CADEAUX_TRANCHE_AGE_3_6 = Pattern.compile("b3f83de3|6a52d970|2287ae90|a3ba8f33|b37eb259");
@@ -45,8 +66,17 @@ class AttribuerCadeauxTest {
     private static final Pattern REGEX_REF_CADEAUX_TRANCHE_AGE_50_60 = Pattern.compile("f14f767d|9393cf65|6082f1f6|e72cfae4|7b22a16f");
     private static final Pattern REGEX_REF_CADEAUX_TRANCHE_AGE_60_150 = Pattern.compile("b9dcca0d|90a2efeb|67f53023|0200ddd6|d9860e8d");
 
+    private static final LocalDate NOW = LocalDate.of(2018, 10, 1);
+    private static final LocalDate NOW_MINUS_ONE_YEAR = LocalDate.of(2017, 10, 1);
+
+    @BeforeEach
+    void setUp() {
+        Clock clock = Clock.fixed(Instant.parse("2018-10-01T10:15:30.00Z"), ZoneId.of("Europe/Paris"));
+        attribuerCadeaux.setClock(clock);
+        doReturn(CADEAUX_BY_TRANCHE_AGE).when(cadeauxByTrancheAgePort).get();
+    }
     @Test
-    void attribuerCadeaux_habitantTrancheAge0_3() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge0_3() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Paron";
@@ -61,7 +91,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
         verifyEmailsSent("elise.paron@example.fr", "Elise Paron", REGEX_REF_CADEAUX_TRANCHE_AGE_0_3);
@@ -69,7 +99,7 @@ class AttribuerCadeauxTest {
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge3_6() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge3_6() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Giron";
@@ -84,7 +114,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
         verifyEmailsSent("manon.giron@example.fr", "Manon Giron", REGEX_REF_CADEAUX_TRANCHE_AGE_3_6);
@@ -92,7 +122,7 @@ class AttribuerCadeauxTest {
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge6_10() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge6_10() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Perraud";
@@ -107,7 +137,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
         verifyEmailsSent("lucas.perraud@example.fr", "Lucas Perraud", REGEX_REF_CADEAUX_TRANCHE_AGE_6_10);
@@ -115,7 +145,7 @@ class AttribuerCadeauxTest {
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge10_15() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge10_15() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Leduc";
@@ -130,7 +160,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
         verifyEmailsSent("etienne.leduc@example.fr", "Etienne Leduc", REGEX_REF_CADEAUX_TRANCHE_AGE_10_15);
@@ -138,7 +168,7 @@ class AttribuerCadeauxTest {
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge15_20() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge15_20() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Guilbaud";
@@ -153,7 +183,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
         verifyEmailsSent("elodie.guilbaud@example.fr", "Elodie Guilbaud", REGEX_REF_CADEAUX_TRANCHE_AGE_15_20);
@@ -161,7 +191,7 @@ class AttribuerCadeauxTest {
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge20_30() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge20_30() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Newman";
@@ -176,7 +206,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
         verifyEmailsSent("paul.newman@example.fr", "Paul Newman", REGEX_REF_CADEAUX_TRANCHE_AGE_20_30);
@@ -184,7 +214,7 @@ class AttribuerCadeauxTest {
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge30_40() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge30_40() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Carin";
@@ -199,7 +229,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
         verifyEmailsSent("marie.carin@example.fr", "Marie Carin", REGEX_REF_CADEAUX_TRANCHE_AGE_30_40);
@@ -207,7 +237,7 @@ class AttribuerCadeauxTest {
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge40_50() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge40_50() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Dumond";
@@ -222,7 +252,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
         verifyEmailsSent("michel.dumond@example.fr", "Michel Dumond", REGEX_REF_CADEAUX_TRANCHE_AGE_40_50);
@@ -230,7 +260,7 @@ class AttribuerCadeauxTest {
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge50_60() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge50_60() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Avro";
@@ -245,7 +275,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
         verifyEmailsSent("julien.avro@example.fr", "Julien Avro", REGEX_REF_CADEAUX_TRANCHE_AGE_50_60);
@@ -253,7 +283,7 @@ class AttribuerCadeauxTest {
     }
 
     @Test
-    void attribuerCadeaux_habitantTrancheAge60_150() throws IOException, MessagingException {
+    void attribuerCadeaux_habitantTrancheAge60_150() {
         // Given
         String id = UUID.randomUUID().toString();
         String nom = "Pascalin";
@@ -268,7 +298,7 @@ class AttribuerCadeauxTest {
                 .getEligiblesCadeaux(NOW_MINUS_ONE_YEAR);
 
         // When
-        attribuerCadeaux.execute(FILE_NAME, NOW);
+        attribuerCadeaux.execute();
 
         // Then
         verifyEmailsSent("yvette.pascalin@example.fr", "Yvette Pascalin", REGEX_REF_CADEAUX_TRANCHE_AGE_60_150);

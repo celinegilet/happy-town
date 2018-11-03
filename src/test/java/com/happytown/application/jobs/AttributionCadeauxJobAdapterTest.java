@@ -7,12 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.mail.MessagingException;
-import java.io.IOException;
-import java.time.LocalDate;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,7 +19,7 @@ class AttributionCadeauxJobAdapterTest {
     AttribuerCadeaux attribuerCadeaux;
 
     @Test
-    void execute_shouldTriggerAttribuerCadeauxUseCase() throws IOException, MessagingException {
+    void execute_shouldTriggerAttribuerCadeauxUseCase() {
         // Given
         String fileName = "src/main/resources/cadeaux.txt";
 
@@ -33,11 +27,7 @@ class AttributionCadeauxJobAdapterTest {
         attributionCadeauxJobAdapter.execute();
 
         // Then
-        verify(attribuerCadeaux)
-                .execute(
-                        eq(fileName),
-                        any(LocalDate.class)
-                );
+        verify(attribuerCadeaux).execute();
     }
 
 }

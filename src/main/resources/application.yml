@@ -26,3 +26,7 @@ mail:
     host: localhost
     port: 2525
     from: mairie@happytown.com
+
+file:
+  cadeauxByTrancheAge:
+    path: src/main/resources/cadeaux.txt
