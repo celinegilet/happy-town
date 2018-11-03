@@ -1,4 +1,4 @@
-package com.happytown.configuration;
+package com.happytown.application.rest;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
