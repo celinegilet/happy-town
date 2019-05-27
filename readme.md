@@ -49,3 +49,6 @@ Le rôle de notre application est donc :
     * Password :
 ![h2-console](images/h2-console.png)
 ![h2-console-recette](images/h2-console-recette.png)
+
+## Support de présentation avec explication et schémas
+ * [D'une architecture N-Tiers à une architecture Clean Hexagonale](https://speakerdeck.com/celinegilet/dune-architecture-n-tiers-a-une-architecture-clean-hexagonale)
